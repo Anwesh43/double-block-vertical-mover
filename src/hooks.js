@@ -1,5 +1,5 @@
 import {useState, useEffect} from 'react'
-import {sinify, divideScale, maxScale} from './hooks'
+import {sinify, divideScale, maxScale} from './utils'
 
 export const useAnimatedScale = (scGap, delay) => {
     const [scale, setScale] = useState(0)
@@ -49,14 +49,14 @@ export const useStyle = (scale, w, h) => {
     const sc2 = divideScale(sf, 1, 2)
     const fixedH = h / 2
     const blockSize = Math.min(w, h) / 8
-    const y = fixedH - (h / 2 - blockSize) * sf2
+    const y = fixedH - (h / 2 - blockSize) * sc2
     const fixedW = w / 2
     const position = 'absolute'
     const background = '#673AB7'
     return {
         blockStyle(i) {
             const sj = 1 - 2 * i
-            const x = fixedW * i + (fixedW - blockSize) * sj * sc1
+            const x = (w - blockSize) * i + (fixedW - blockSize) * sj * sc1
             const left = `${x}px`
             const top = `${y - blockSize}px`
             const width = `${blockSize}px`
@@ -64,7 +64,7 @@ export const useStyle = (scale, w, h) => {
             return {position, top, left, width, height, background}
         },
         tStyle() {
-            const left = `${w / 2 - fixedW / 2}px`
+            const left = `${w / 2 - blockSize / 2}px`
             const top = `${y}px`
             const width = `${blockSize}px`
             const height = `${fixedH - y}px`
